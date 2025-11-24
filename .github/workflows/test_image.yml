@@ -10,19 +10,19 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
       - name: Pull image
         run: docker pull splituu/gha-docker-pipeline-demo:latest
 
       - name: Run container
         run: |
-          docker run --name test_container splituu/gha-docker-pipeline-demo:latest
-          docker logs test_container
+          docker run -v ${{ github.workspace }}/junit:/tmp splituu/gha-docker-pipeline-demo:latest pytest tests/test_main.py --junitxml=/tmp/report.xml
 
-      - name: Check output contains "University"
-        run: |
-          OUTPUT=$(docker logs test_container)
-          echo "$OUTPUT"
-          if ! echo "$OUTPUT" | grep -q "University"; then
-            echo "Output does not contain expected results"
-            exit 1
-          fi
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-results
+          path: junit/report.xml
+        if: ${{ always() }}
