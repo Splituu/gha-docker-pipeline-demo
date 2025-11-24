@@ -1,7 +1,7 @@
 name: Test image
 on:
   workflow_run:
-    workflows: ["build_and_push"]
+    workflows: ["Build and push image"]
     types:
       - completed
 
