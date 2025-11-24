@@ -1,0 +1,21 @@
+name: Build and push image
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: build image
+        run: |
+          docker build . -t splituu/gha-docker-pipeline-demo:latest
+
+      - name: publish image
+        run: |
+          docker login -u splituu -p ${{ secrets.DOCKER_HUB_TOKEN }}
+          docker push splituu/gha-docker-pipeline-demo:latest

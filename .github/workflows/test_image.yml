@@ -1,0 +1,28 @@
+name: Test image
+on:
+  workflow_run:
+    workflows: ["build_and_push"]
+    types:
+      - completed
+
+jobs:
+  test-image:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Pull image
+        run: docker pull splituu/gha-docker-pipeline-demo:latest
+
+      - name: Run container
+        run: |
+          docker run --name test_container splituu/gha-docker-pipeline-demo:latest
+          docker logs test_container
+
+      - name: Check output contains "University"
+        run: |
+          OUTPUT=$(docker logs test_container)
+          echo "$OUTPUT"
+          if ! echo "$OUTPUT" | grep -q "University"; then
+            echo "Output does not contain expected results"
+            exit 1
+          fi
