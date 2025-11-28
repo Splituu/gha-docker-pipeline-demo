@@ -21,9 +21,9 @@ run-local:
 run-remote:
 	mkdir -p junit
 	docker run --rm \
-		-v $(pwd)/junit:/app/junit \
+		-v $(pwd)/junit:/junit \
 		$(REGISTRY):$(VERSION) \
-		pytest tests/ -vv --junitxml=/app/junit/report.xml -v
+		pytest tests/ -vv --junitxml=/junit/report.xml
 
 release: build push
 
