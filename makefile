@@ -12,20 +12,11 @@ push:
 	docker push $(REGISTRY):$(GIT_SHA)
 	docker push $(REGISTRY):$(VERSION)
 
-run-local:
-	mkdir -p junit
-	docker run --rm -p 8000:8000 \
-		-v $(pwd)/junit:/app/junit \
-		$(IMAGE_NAME):$(VERSION)
-
-run-remote:
+run-local: build
 	mkdir -p junit
 	docker run --rm \
-		-v $(pwd)/junit:/junit \
-		$(REGISTRY):$(VERSION) \
-		pytest tests/ -vv --junitxml=/junit/report.xml
+		-v $(PWD)/junit:/app/junit \
+		$(IMAGE_NAME):$(GIT_SHA) \ 
+		pytest --junitxml=/app/junit/report.xml
 
 release: build push
-
-clean:
-	docker system prune -f
