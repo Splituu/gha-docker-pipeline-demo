@@ -18,8 +18,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-      - name: pull image from GHCR and run tests
-        run: make run-remote
+      - name: Run tests in image (no make)
+        run: |
+          make run-local
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
