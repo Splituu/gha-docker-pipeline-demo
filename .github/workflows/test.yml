@@ -1,7 +1,7 @@
 name: Test image
 on:
   workflow_run:
-    workflows: ["Release"]
+    workflows: [ "Release" ]
     types: [ completed ]
     branches: [ main ]
 

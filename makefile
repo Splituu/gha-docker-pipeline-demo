@@ -23,7 +23,7 @@ run-remote:
 	docker run --rm \
 		-v $(pwd)/junit:/app/junit \
 		$(REGISTRY):$(VERSION) \
-		pytest --junitxml=/app/junit/report.xml -v
+		pytest tests/ -vv --junitxml=/app/junit/report.xml -v
 
 release: build push
 
