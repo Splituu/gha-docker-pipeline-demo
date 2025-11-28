@@ -1,0 +1,29 @@
+name: Test image
+on:
+  workflow_run:
+    workflows: ["Release"]
+    types: [ completed ]
+    branches: [ main ]
+
+jobs:
+  test:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: pull image from GHCR and run tests
+        run: make run-remote
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pytest-results
+          path: junit/report.xml
