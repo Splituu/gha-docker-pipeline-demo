@@ -16,7 +16,7 @@ test:
 
 push:
 	docker tag $(IMAGE_NAME):$(GIT_SHA) $(REGISTRY):$(GIT_SHA)
-	docker tag $(IMAGE_NAME):$(GIT_SHA) $(REGISTRY):$(VERSION)
+	docker tag $(IMAGE_NAME):$(VERSION) $(REGISTRY):$(VERSION)
 	docker push $(REGISTRY):$(GIT_SHA)
 	docker push $(REGISTRY):$(VERSION)
 
