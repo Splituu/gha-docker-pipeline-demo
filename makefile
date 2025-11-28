@@ -6,9 +6,8 @@ GIT_SHA=$(shell git rev-parse --short HEAD)
 build:
 	docker build -t "$(IMAGE_NAME):$(GIT_SHA)" -t "$(IMAGE_NAME):$(VERSION)" .
 
-test:
+test: build
 	mkdir -p junit
-	build
 	docker run --rm \
 		-v $(PWD)/junit:/app/junit \
 		$(IMAGE_NAME):$(GIT_SHA) \
