@@ -1,14 +1,14 @@
-IMAGE_NAME="gha-docker-pipeline-demo"
+IMAGE_NAME=gha-docker-pipeline-demo
 REGISTRY=ghcr.io/splituu/gha-docker-pipeline-demo
 VERSION=$(shell cat version.txt | tr -d '[:space:]')
 GIT_SHA=$(shell git rev-parse --short HEAD)
 
 build:
-	docker build -t "$(IMAGE_NAME):$(GIT_SHA)" -t "$(IMAGE_NAME):$(VERSION)" .
+	docker build -t $(IMAGE_NAME):$(GIT_SHA) .
 
-test: 
-	build
+test:
 	mkdir -p junit
+	build
 	docker run --rm \
 		-v $(PWD)/junit:/app/junit \
 		$(IMAGE_NAME):$(GIT_SHA) \
@@ -16,8 +16,8 @@ test:
 
 push:
 	docker tag $(IMAGE_NAME):$(GIT_SHA) $(REGISTRY):$(GIT_SHA)
-	docker tag $(IMAGE_NAME):$(VERSION) $(REGISTRY):$(VERSION)
+	docker tag $(IMAGE_NAME):$(GIT_SHA) $(REGISTRY):$(VERSION)
 	docker push $(REGISTRY):$(GIT_SHA)
 	docker push $(REGISTRY):$(VERSION)
 
-release: build push
+release: test push
