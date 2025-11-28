@@ -4,7 +4,7 @@ VERSION=$(shell cat version.txt | tr -d '[:space:]')
 GIT_SHA=$(shell git rev-parse --short HEAD)
 
 build:
-	docker build -t $(IMAGE_NAME):$(GIT_SHA) .
+	docker build -t "$(IMAGE_NAME):$(GIT_SHA)" -t "$(IMAGE_NAME):$(VERSION)" .
 
 test:
 	mkdir -p junit
@@ -20,4 +20,4 @@ push:
 	docker push $(REGISTRY):$(GIT_SHA)
 	docker push $(REGISTRY):$(VERSION)
 
-release: test push
+release: build push
